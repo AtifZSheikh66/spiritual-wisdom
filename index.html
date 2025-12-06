@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Spiritual Wisdom</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" class="light">
+    <!-- Header -->
+    <header class="topbar">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" class="logo-icon" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" fill="url(#g)"></circle>
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#7b61ff"></stop>
+              <stop offset="1" stop-color="#00bcd4"></stop>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="brand">
+          <span class="brand-title">Spiritual</span>
+          <span class="brand-sub">Wisdom</span>
+        </div>
+      </div>
+
+      <button id="menuBtn" class="icon-btn" aria-label="menu">☰</button>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-card glass">
+        <div class="quote" id="quote">“Peace is the beauty of life — find it within.”</div>
+        <div class="hero-actions">
+          <input id="search" class="search" type="search" placeholder="Search divine knowledge…" aria-label="Search posts">
+          <button id="dailyBtn" class="chip">Daily Wisdom</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Religion Icons -->
+    <section class="religions">
+      <div><p></p></div>
+      <div class="icons-grid" id="religionGrid" role="list">
+        <!-- Each button has data-religion -->
+        <button class="religion" data-religion="all"><span class="rel-emoji">✨</span><small>All</small></button>
+        <button class="religion" data-religion="hindu"><span class="rel-emoji">🕉️</span><small>Hinduism</small></button>
+        <button class="religion" data-religion="islam"><span class="rel-emoji">☪️</span><small>Islam</small></button>
+        <button class="religion" data-religion="christian"><span class="rel-emoji">✝️</span><small>Christianity</small></button>
+        <button class="religion" data-religion="buddha"><span class="rel-emoji">☸️</span><small>Buddhism</small></button>
+        <button class="religion" data-religion="sikh"><span class="rel-emoji">🛕</span><small>Sikhism</small></button>
+        <button class="religion" data-religion="jain"><span class="rel-emoji">🔯</span><small>Jainism</small></button>
+        <button class="religion" data-religion="other"><span class="rel-emoji">🌐</span><small>Universal</small></button>
+      </div>
+    </section>
+
+
+    <!-- Posts feed -->
+    <main class="feed" id="feed">
+      <h3 class="section-title">Posts</h3>
+      <div id="posts" class="posts-grid" aria-live="polite">
+        <!-- JS-generated post cards -->
+      </div>
+    </main>
+
+
+
+  <!-- Offcanvas menu (same as index.html) -->
+    <aside id="menu" class="offcanvas" aria-hidden="true">
+      <div class="menu-header">
+        <strong>Spiritual Wisdom</strong>
+        <button id="closeMenu" class="icon-btn" aria-label="Close menu">✕</button>
+      </div>
+      <ul class="menu-list">
+        <li><button class="menu-item" id="toggleTheme">Toggle Dark</button></li>
+        <li><a class="menu-item" href="index.html">Home</a></li>
+      </ul>
+    </aside>
+  </div>
+  
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

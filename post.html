@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spiritual Wisdom — Post</title>
+  <!-- ✅ Fixed font link (no space!) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .post-page {
+      padding: 16px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .post-header {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .post-thumb {
+      width: 82px;
+      height: 82px;
+      border-radius: 16px;
+      background: var(--accent1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    .post-info h1 {
+      font-family: 'Merriweather', serif;
+      font-weight: 700;
+      font-size: 22px;
+      margin: 0 0 8px;
+      color: var(--text);
+    }
+    .post-content {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+      white-space: pre-line;
+      margin-top: 12px;
+    }
+    .post-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .post-actions .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .back-btn {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+    }
+    .save-btn.saved {
+      color: #ff4757;
+    }
+    @media (max-width: 500px) {
+      .post-header { flex-direction: column; align-items: flex-start; }
+      .post-thumb { width: 72px; height: 72px; font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="light">
+    <header class="topbar">
+      <button id="backBtn" class="icon-btn" aria-label="Go back">←</button>
+      <div class="brand">
+        <span class="brand-title">Wisdom</span>
+      </div>
+      <button id="menuBtn" class="icon-btn" aria-label="Menu">☰</button>
+    </header>
+
+    <main class="post-page" id="postContent">
+      <!-- Post will be injected here -->
+      <div>Loading...</div>
+    </main>
+
+    <!-- Offcanvas menu (same as index.html) -->
+    <aside id="menu" class="offcanvas" aria-hidden="true">
+      <div class="menu-header">
+        <strong>Spiritual Wisdom</strong>
+        <button id="closeMenu" class="icon-btn" aria-label="Close menu">✕</button>
+      </div>
+      <ul class="menu-list">
+        <li><button class="menu-item" id="toggleTheme">Toggle Dark</button></li>
+        <li><a class="menu-item" href="index.html">Home</a></li>
+      </ul>
+    </aside>
+  </div>
+  
+  <script src="data.js"></script>
+
+  <!-- ✅ Key: Load posts data via a shared module or inline -->
+  <script>
+    // ✅ We'll define postsData directly here (or later move to a shared file)
+    
+
+    // DOM elements
+    const app = document.getElementById('app');
+    const postContent = document.getElementById('postContent');
+    const backBtn = document.getElementById('backBtn');
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenu = document.getElementById('closeMenu');
+    const toggleTheme = document.getElementById('toggleTheme');
+    const menu = document.getElementById('menu');
+
+    // Theme toggle
+    function initTheme() {
+      const isDark = localStorage.getItem('theme') === 'dark';
+      if (isDark) {
+        app.classList.remove('light');
+        app.classList.add('dark');
+      }
+    }
+
+    // Save posts
+    function getFavorites() {
+      return new Set(JSON.parse(localStorage.getItem('sw_favs') || '[]'));
+    }
+
+    function toggleSave(id) {
+      const favs = getFavorites();
+      const idStr = String(id);
+      if (favs.has(idStr)) {
+        favs.delete(idStr);
+      } else {
+        favs.add(idStr);
+      }
+      localStorage.setItem('sw_favs', JSON.stringify(Array.from(favs)));
+      renderPost(id); // re-render to update button
+    }
+
+    // Render post by ID
+    function renderPost(id) {
+      const post = postsData.find(p => p.id === Number(id));
+      const favs = getFavorites();
+      const isSaved = favs.has(String(id));
+
+      if (!post) {
+        postContent.innerHTML = `
+          <div style="padding:30px; text-align:center; color:var(--muted);">
+            <h3>Post not found</h3>
+            <a href="index.html" class="btn" style="margin-top:16px;">← Back to Home</a>
+          </div>
+        `;
+        return;
+      }
+
+      postContent.innerHTML = `
+        <div class="post-header">
+          
+          <div class="post-info">
+            <h1>${escapeHtml(post.title)}</h1>
+          </div>
+        </div>
+        <div class="post-content">${escapeHtml(post.content)}</div>
+      `;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c =>
+        ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])
+      );
+    }
+
+    // Event delegation
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'saveBtn') {
+        const id = e.target.dataset.id;
+        toggleSave(id);
+      }
+      if (e.target.id === 'backBtn2') {
+        history.back();
+      }
+    });
+
+    // Menu toggle
+    menuBtn?.addEventListener('click', () => menu.setAttribute('aria-hidden', 'false'));
+    closeMenu?.addEventListener('click', () => menu.setAttribute('aria-hidden', 'true'));
+
+    toggleTheme?.addEventListener('click', () => {
+  app.classList.toggle('dark');
+  app.classList.toggle('light');
+  try {
+    localStorage.setItem('theme', app.classList.contains('dark') ? 'dark' : 'light');
+  } catch (e) {
+    console.warn("Storage not allowed here — theme will reset next visit");
+  }
+});
+
+    backBtn?.addEventListener('click', () => history.back());
+
+    // Initialize
+    initTheme();
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    if (id) {
+      renderPost(id);
+    } else {
+      postContent.innerHTML = `<div style="padding:30px;">No post ID specified.</div>`;
+    }
+  </script>
+</body>
+</html>
